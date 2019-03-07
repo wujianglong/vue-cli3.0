@@ -6,21 +6,23 @@ Vue.use(Router);
 export default new Router({
   mode: "history",
   base: "/",
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Layout",
-      component: () => import("./views/Layout.vue"),
-      child: [
-        {
-          path: "/"
-        }
-      ]
+      component: () =>
+        import ("@/views/Layout.vue"),
+      children: [{
+        path: "jurisdiction",
+        name: "jurisdiction",
+        component: () =>
+          import ("@/views/Jurisdiction.vue")
+      }]
     },
     {
       path: "/login",
       name: "login",
-      component: () => import("./views/Login.vue")
+      component: () =>
+        import ("@/views/Login.vue")
     },
     {
       path: "/about",
@@ -28,7 +30,8 @@ export default new Router({
       meta: {
         requireAuth: true
       },
-      component: () => import("./views/About.vue")
+      component: () =>
+        import ("@/views/About.vue")
     }
   ]
 });

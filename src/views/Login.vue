@@ -42,11 +42,10 @@ export default {
   methods: {
     login() {
       this.$api.login({
-        login_phone_num: "15170037957",
-        login_password: "120820",
-        login_type: "password",
-        platform: 1
+        login_phone_num: "wujianglong",
+        login_password: "123456"
       });
+      // axios.get("/api/login");
     }
   },
   created() {

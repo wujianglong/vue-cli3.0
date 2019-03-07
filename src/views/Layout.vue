@@ -1,101 +1,71 @@
 <template>
   <div class="layout">
     <el-container style="border: 1px solid #eee">
-      <!-- Layout 侧栏 -->
-      <el-aside class="aside">
-        <el-menu :default-openeds="['1', '3']">
-          <el-submenu index="1">
-            <template slot="title"
-              ><i class="el-icon-message"></i>导航一</template
-            >
-            <el-menu-item-group>
-              <template slot="title"
-                >分组一</template
-              >
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title"
-                >选项4</template
-              >
-              <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-submenu index="2">
-            <template slot="title"
-              ><i class="el-icon-menu"></i>导航二</template
-            >
-            <el-menu-item-group>
-              <template slot="title"
-                >分组一</template
-              >
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="2-4">
-              <template slot="title"
-                >选项4</template
-              >
-              <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-submenu index="3">
-            <template slot="title"
-              ><i class="el-icon-setting"></i>导航三</template
-            >
-            <el-menu-item-group>
-              <template slot="title"
-                >分组一</template
-              >
-              <el-menu-item index="3-1">选项1</el-menu-item>
-              <el-menu-item index="3-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="3-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="3-4">
-              <template slot="title"
-                >选项4</template
-              >
-              <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-        </el-menu>
-      </el-aside>
+      <!-- 顶部 -->
+      <el-header style="text-align: right; font-size: 12px">
+        <div class="fl ft24 color-white">
+          中至广告流水系统
+          <Nav></Nav>
+        </div>
+        <el-dropdown>
+          <i class="el-icon-setting mr15" style="margin-right: 15px"></i>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>查看</el-dropdown-item>
+            <el-dropdown-item>新增</el-dropdown-item>
+            <el-dropdown-item>删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <span>伍江龙</span>
+      </el-header>
       <!-- Layout 主要内容 -->
       <el-container class="container">
-        <!-- 顶部 -->
-        <el-header style="text-align: right; font-size: 12px">
-          <div class="fl ft24 color-white">
-            中至广告流水系统
-            <Nav></Nav>
-          </div>
-          <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-          <span>王小虎</span>
-        </el-header>
+        <!-- Layout 侧栏 -->
+        <el-aside class="aside">
+          <el-menu :default-openeds="['3']">
+            <!-- 首页 -->
+            <el-menu-item index="1">
+              <i class="icon aliiconfont el-icon-aliicon_work_fill"></i>
+              <span slot="title">首页</span>
+            </el-menu-item>
+            <!-- 产品管理 -->
+            <el-menu-item index="2">
+              <i class="icon aliiconfont el-icon-aliicon_work_fill"></i>
+              <span slot="title">产品列表</span>
+            </el-menu-item>
+            <!-- 用户管理 -->
+            <el-menu-item index="3">
+              <i class="icon aliiconfont el-icon-aliicon_signal_fill"></i>
+              <span slot="title">用户管理</span>
+            </el-menu-item>
+            <!-- 财务管理 -->
+            <el-submenu index="4">
+              <template slot="title"
+                ><i class="icon aliiconfont el-icon-aliicon_gather_fill"></i
+                >财务管理</template
+              >
+              <el-menu-item index="1-1">充值列表</el-menu-item>
+              <el-menu-item index="1-2">返点列表</el-menu-item>
+            </el-submenu>
+            <!-- 资金管理 -->
+            <el-menu-item index="5">
+              <i class="icon aliiconfont el-icon-aliicon_sketch_fill"></i>
+              <span slot="title">资金管理</span>
+            </el-menu-item>
+            <!-- 权限管理 -->
+            <el-menu-item index="6">
+              <i class="icon aliiconfont el-icon-aliicon_meeting_fill"></i>
+              <span slot="title">权限管理</span>
+            </el-menu-item>
+            <!-- 发票管理 -->
+            <el-menu-item index="7">
+              <i class="icon aliiconfont el-icon-aliicon_calendar_fill"></i>
+              <span slot="title">发票管理</span>
+            </el-menu-item>
+          </el-menu>
+        </el-aside>
         <!-- main -->
         <el-main>
-          <el-table :data="tableData">
-            <el-table-column prop="date" label="日期" width="140">
-            </el-table-column>
-            <el-table-column prop="name" label="姓名" width="120">
-            </el-table-column>
-            <el-table-column prop="address" label="地址"> </el-table-column>
-          </el-table>
+          <router-view></router-view>
         </el-main>
       </el-container>
     </el-container>
@@ -108,7 +78,7 @@ export default {
   data() {
     const item = {
       date: "2016-05-02",
-      name: "王小虎",
+      name: "伍江龙",
       address: "上海市普陀区金沙江路 1518 弄"
     };
     return {
@@ -126,13 +96,16 @@ export default {
   border-right solid 1px #e6e6e6
   >ul
     border-right none
+    >li
+      i.icon
+        margin-right 5px
 .layout
   height 100%
   >section
     height 100%
     overflow auto
 .el-header
-  background-color #b3c0d1
+  background-color #304056
   color #333
   line-height 60px
 .el-aside

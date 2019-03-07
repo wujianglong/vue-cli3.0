@@ -14,10 +14,26 @@ module.exports = {
     host: "localhost",
     // 自动打开浏览器
     open: true,
+    hotOnly: true
     // 页面显示警告与错误
-    overlay: {
-      warnings: true,
-      errors: true
-    }
+    // overlay: {
+    //   // warnings: true,
+    //   // errors: true
+    // },
+    // proxy: {
+    //   "/api": {
+    //     target: "http://dev.txgg.zonst.org",
+    //     changeOrigin: true,
+    //     ws: true,
+    //     secure: false,
+    //     pathRewrite: {
+    //       "^/api": "",
+    //       onProxyReq() {
+    //         console.log("cccc");
+    //       }
+    //     }
+    //   }
+    // }
+    // proxy: "http://dev.txgg.zonst.org"
   }
 };
