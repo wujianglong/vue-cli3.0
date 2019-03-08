@@ -38,18 +38,43 @@ export default {
       password: ""
     };
   },
-  components: {},
   methods: {
     login() {
-      this.$api.login({
-        login_phone_num: "wujianglong",
-        login_password: "123456"
-      });
-      // axios.get("/api/login");
+      if (!this.userName) {
+        this.$notify({
+          title: "警告",
+          message: "用户名不能为空",
+          type: "warning"
+        });
+        return false;
+      } else if (!this.password) {
+        this.$notify({
+          title: "警告",
+          message: "密码不能为空",
+          type: "warning"
+        });
+        return false;
+      }
+
+      this.$store
+        .dispatch("userInfo", {
+          username: this.userName,
+          password: this.password
+        })
+        .then(res => {
+          if (String(res.err_no) === "1") {
+            this.$notify({
+              title: "警告",
+              message: "用户名或者密码错误",
+              type: "warning"
+            });
+          } else {
+            this.$router.replace("/");
+          }
+        });
     }
   },
   created() {
-    console.log(process.env);
     console.log("VUE_APP_SECRET", process.env.VUE_APP_env);
     console.log("node_env", process.env.NODE_ENV);
   }

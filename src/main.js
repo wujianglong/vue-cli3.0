@@ -1,7 +1,7 @@
 import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import store from "./store/store";
 import api from "./api/api.js";
 
 // 引入element-ui组件
@@ -19,8 +19,11 @@ Vue.use(ElementUI);
 // 阻止启动生产提示
 Vue.config.productionTip = false;
 
-// 全局api调用
+// 全局调用api
 Vue.prototype.$api = api;
+
+// 全局调用store
+Vue.prototype.$store = store;
 
 new Vue({
   router,

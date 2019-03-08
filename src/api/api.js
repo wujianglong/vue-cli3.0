@@ -15,18 +15,18 @@ export default {
   },
   // 更新用户信息
   updateUser(params) {
-    return ask.askPost(baseApiUrl + "/user", params);
+    return ask.askPut(baseApiUrl + "/user/", params);
   },
   // 创建用户信息
   createUser(params) {
-    return ask.askPost(baseApiUrl + "/user", params);
+    return ask.askPost(baseApiUrl + "/user/", params);
   },
   // 删除用户信息
   deleteUser(params) {
-    return ask.askPost(baseApiUrl + "/user", params);
+    return ask.askDelete(baseApiUrl + "/user/", params);
   },
   // 获取用户信息
   getUser(params) {
-    return ask.askPost(baseApiUrl + "/user", params);
+    return ask.askGet(baseApiUrl + "/user/", params);
   }
 };

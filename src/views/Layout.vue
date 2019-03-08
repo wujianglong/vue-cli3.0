@@ -23,8 +23,8 @@
         <el-aside class="aside">
           <el-menu :default-openeds="['3']">
             <!-- 首页 -->
-            <el-menu-item index="1">
-              <i class="icon aliiconfont el-icon-aliicon_work_fill"></i>
+            <el-menu-item index="1" @click="toIndex">
+              <i class="icon aliiconfont el-icon-aliicon_homepage_fill"></i>
               <span slot="title">首页</span>
             </el-menu-item>
             <!-- 产品管理 -->
@@ -52,7 +52,7 @@
               <span slot="title">资金管理</span>
             </el-menu-item>
             <!-- 权限管理 -->
-            <el-menu-item index="6">
+            <el-menu-item index="6" @click="toJurisdiction">
               <i class="icon aliiconfont el-icon-aliicon_meeting_fill"></i>
               <span slot="title">权限管理</span>
             </el-menu-item>
@@ -65,6 +65,12 @@
         </el-aside>
         <!-- main -->
         <el-main>
+          <el-breadcrumb separator="/">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>
+              <router-link to="/jurisdiction">权限管理</router-link>
+            </el-breadcrumb-item>
+          </el-breadcrumb>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -87,6 +93,14 @@ export default {
   },
   components: {
     Nav
+  },
+  methods: {
+    toIndex() {
+      this.$router.push("/");
+    },
+    toJurisdiction() {
+      this.$router.push("/role");
+    }
   }
 };
 </script>
