@@ -3,30 +3,26 @@ import ask from "./config";
 
 let baseApiUrl;
 if (process.env.NODE_ENV === "development") {
-  baseApiUrl = "http://dev.txgg.zonst.org/api";
+  baseApiUrl = "http://exam_dev.z7z8.cc/api";
 } else {
-  baseApiUrl = "http://dev.txgg.zonst.org/api";
+  baseApiUrl = "http://exam_dev.z7z8.cc/api";
 }
 
 export default {
-  // 用户登录  请求地址是否跨域确认下
-  login(params) {
-    return ask.askPost(baseApiUrl + "/login/", params);
+  // 获取试题信息
+  getPaper(params) {
+    return ask.askGet(baseApiUrl + "/paper/", params);
   },
-  // 更新用户信息
-  updateUser(params) {
-    return ask.askPut(baseApiUrl + "/user/", params);
+  // 提交答卷
+  submit(params) {
+    return ask.askPost(baseApiUrl + "/paper/", params);
   },
-  // 创建用户信息
-  createUser(params) {
+  // 提交用户信息
+  user(params) {
     return ask.askPost(baseApiUrl + "/user/", params);
   },
-  // 删除用户信息
-  deleteUser(params) {
-    return ask.askDelete(baseApiUrl + "/user/", params);
-  },
-  // 获取用户信息
-  getUser(params) {
-    return ask.askGet(baseApiUrl + "/user/", params);
+  // code有效性验证
+  validate(params) {
+    return ask.askGet(baseApiUrl + "/code_status/", params);
   }
 };

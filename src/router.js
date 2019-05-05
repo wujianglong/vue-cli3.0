@@ -8,24 +8,12 @@ export default new Router({
   base: "/",
   routes: [
     {
-      path: "/",
-      name: "Layout",
-      component: () => import("@/views/Layout.vue"),
-      children: [
-        {
-          path: "role",
-          name: "role",
-          component: () => import("@/views/Role.vue")
-        },
-        {
-          path: "product",
-          name: "product",
-          component: () => import("@/views/Product.vue")
-        }
-      ]
+      path: "/test",
+      name: "Test",
+      component: () => import("@/views/Test.vue")
     },
     {
-      path: "/login",
+      path: "/",
       name: "login",
       component: () => import("@/views/Login.vue")
     },

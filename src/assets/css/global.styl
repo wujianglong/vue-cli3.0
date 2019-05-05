@@ -6,6 +6,13 @@
   -webkit-box-sizing border-box
   box-sizing border-box
   -webkit-tap-highlight-color transparent
+  font-family "microsoft yahei","Lucida Grande",Helvetica,Arial,Verdana,sans-serif
+
+.el-radio__input.is-checked+.el-radio__label
+  color #606266
+
+.spinner
+  display none!important
 
 .fr
   float right
@@ -58,7 +65,7 @@ for b1 in 10..100
   .wid-{b1}
     width b1 * 1%!important
 
-for b in 1..40
+for b in 1..60
   .mar{b}
     margin b * 1px
 
@@ -125,3 +132,8 @@ html,body
   padding-top 25px
   padding-bottom 25px
   background-color #f2f2f2
+
+// input
+.date-picker
+  .el-input__inner
+    border none!important

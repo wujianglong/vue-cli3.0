@@ -34,9 +34,9 @@ axios.interceptors.response.use(
       case 401:
         // token失效状态码
         localStorage.clear();
-        router.replace({
-          path: "/login"
-        });
+        // router.replace({
+        //   path: "/"
+        // });
         Notification({
           title: "警告",
           message: "登录信息失效，请重新登录。",

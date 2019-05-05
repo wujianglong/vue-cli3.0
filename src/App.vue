@@ -9,7 +9,13 @@
 </template>
 <script>
 export default {
-  name: "app"
+  name: "app",
+  created() {
+    window.onbeforeunload = function() {
+      return 1;
+    };
+  },
+  mounted() {}
 };
 </script>
 <style lang="stylus">

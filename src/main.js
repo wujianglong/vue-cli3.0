@@ -9,6 +9,8 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import "element-ui/lib/theme-chalk/display.css";
 
+import "nprogress/nprogress.css";
+
 // 引入自定义icon
 import "@/assets/icon/iconfont.css";
 
