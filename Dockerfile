@@ -1,4 +1,4 @@
-FROM ccr.ccs.tencentyun.com/zonst/nodejs:v8.16.0
+FROM ccr.ccs.tencentyun.com/zonst/nodejs:v8.16.0 as build
 add . /home/
 workdir /home/
 #run curl --silent --location https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
