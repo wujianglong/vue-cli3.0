@@ -138,19 +138,19 @@ export default {
         return false;
       }
 
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: true })
-        .then(() => {
-          console.log("检测到视频设备");
-        })
-        .catch(() => {
-          this.$notify({
-            title: "提示",
-            message: "未检测到摄像设备，请使用具有摄像设备电脑答题",
-            type: "warning"
-          });
-          return false;
-        });
+      // navigator.mediaDevices
+      //   .getUserMedia({ video: true, audio: true })
+      //   .then(() => {
+      //     console.log("检测到视频设备");
+      //   })
+      //   .catch(() => {
+      //     this.$notify({
+      //       title: "提示",
+      //       message: "未检测到摄像设备，请使用具有摄像设备电脑答题",
+      //       type: "warning"
+      //     });
+      //     return false;
+      //   });
 
       if (Object.values(this.data).includes("")) {
         this.$notify({

@@ -122,7 +122,7 @@ export default {
     }
   },
   mounted() {
-    this.testing();
+    // this.testing();
 
     if (!this.$route.query.code) {
       this.end = true;

@@ -3,9 +3,9 @@ import ask from "./config";
 
 let baseApiUrl;
 if (process.env.NODE_ENV === "development") {
-  baseApiUrl = "https://exam_dev.z7z8.cc/api";
+  baseApiUrl = "http://exam_dev.z7z8.cc/api";
 } else {
-  baseApiUrl = "https://exam_dev.z7z8.cc/api";
+  baseApiUrl = "http://exam_dev.z7z8.cc/api";
 }
 
 export default {
