@@ -29,7 +29,7 @@
             </div> -->
           </div>
           <div v-if="!end">
-            <h1>选择题（50道）</h1>
+            <h1>选择题（{{ this.select.length }}道）</h1>
             <div class="fieldset">
               <div class="div_question" v-for="(o, i) in select" :key="i">
                 <div class="div_topic">
@@ -51,7 +51,7 @@
             </div>
 
             <div class="fieldset">
-              <h1>简答题（10道）</h1>
+              <h1>简答题（{{ this.shortAnswer.length }}道）</h1>
               <div class="div_question" v-for="(o, i) in shortAnswer" :key="i">
                 <div class="div_topic">
                   <span>{{ i + 1 }}.</span>
