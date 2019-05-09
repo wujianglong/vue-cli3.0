@@ -151,7 +151,7 @@ export default {
             .then(res => {
               // 时间逆序
               this.maxtime = parseInt(
-                (+new Date(res.start_time_s) + 30 * 1000 - +new Date()) / 1000
+                (+new Date(res.start_time_s) + 60 * 1000 - +new Date()) / 1000
               );
 
               let q = res.questions;
