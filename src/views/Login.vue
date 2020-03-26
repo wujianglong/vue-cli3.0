@@ -52,7 +52,7 @@
                 />
               </div>
             </li>
-            <li>
+            <!-- <li>
               <div>
                 <img src="../assets/image/2.png" alt="" />
                 <input
@@ -61,7 +61,7 @@
                   type="text"
                 />
               </div>
-            </li>
+            </li> -->
             <li>
               <div>
                 <img src="../assets/image/3.png" alt="" />
@@ -70,17 +70,22 @@
                   placeholder="请输入手机号码"
                   type="text"
                 />
+                <span style="width:80px" @click="sendCode">{{ codeText }}</span>
               </div>
             </li>
             <li>
+              <div>
+                <img src="../assets/image/3.png" alt="" />
+                <input
+                  v-model="data.code"
+                  placeholder="短信验证码"
+                  type="text"
+                />
+              </div>
+            </li>
+            <!-- <li>
               <div class="date-picker">
                 <img src="../assets/image/4.png" alt="" />
-                <!-- <input
-                  v-model="data.time"
-                  placeholder="请输入毕业时间"
-                  type="text"
-                /> -->
-
                 <el-date-picker
                   v-model="data.graduate_time"
                   type="date"
@@ -98,7 +103,7 @@
                   type="text"
                 />
               </div>
-            </li>
+            </li> -->
           </ul>
           <div class="loginBtn" @click="login">
             进入考试
@@ -116,6 +121,8 @@ export default {
     return {
       userName: "",
       password: "",
+      codeFlag: false,
+      codeText: "发送验证码",
       data: {
         username: "伍江龙",
         identity: "360122199310104814",
@@ -128,15 +135,53 @@ export default {
     };
   },
   methods: {
-    login() {
-      if (!this.power) {
+    sendCode() {
+      if (this.codeFlag) {
+        return false;
+      }
+      let reg = /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/;
+      if (!reg.test(this.data.phone)) {
         this.$notify({
-          title: "提示",
-          message: "链接已经失效或者答题已经结束",
-          type: "warning"
+          type: "warning",
+          message: "手机号格式不对"
         });
         return false;
       }
+      this.$api
+        .sendCode({
+          phone: this.data.phone
+        })
+        .then(() => {
+          this.$notify({
+            title: "提示",
+            message: "短信验证码已发送"
+          });
+
+          this.codeFlag = true;
+          let c = 6;
+          this.codeText = c + "s";
+          let s = setInterval(() => {
+            c--;
+            this.codeText = c + "s";
+            if (c < 0) {
+              clearInterval(s);
+              this.codeText = "发送验证码";
+              this.codeFlag = false;
+            }
+          }, 1000);
+
+          // codeText
+        });
+    },
+    login() {
+      // if (!this.power) {
+      //   this.$notify({
+      //     title: "提示",
+      //     message: "链接已经失效或者答题已经结束",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
 
       // navigator.mediaDevices
       //   .getUserMedia({ video: true, audio: true })
@@ -152,49 +197,68 @@ export default {
       //     return false;
       //   });
 
-      if (Object.values(this.data).includes("")) {
-        this.$notify({
-          title: "提示",
-          message: "用户信息不能为空",
-          type: "warning"
-        });
-        return false;
-      } else if (
-        !this.data.identity.match(
-          /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
-        )
-      ) {
-        this.$notify({
-          title: "提示",
-          message: "身份证号码不正确",
-          type: "warning"
-        });
-        return false;
-      } else if (
-        !this.data.phone.match(
-          /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
-        )
-      ) {
-        this.$notify({
-          title: "提示",
-          message: "手机号不正确",
-          type: "warning"
-        });
-        return false;
-      }
+      // if (Object.values(this.data).includes("")) {
+      //   this.$notify({
+      //     title: "提示",
+      //     message: "用户信息不能为空",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // } else if (
+      //   !this.data.identity.match(
+      //     /^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/
+      //   )
+      // ) {
+      //   this.$notify({
+      //     title: "提示",
+      //     message: "身份证号码不正确",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // } else if (
+      //   !this.data.phone.match(
+      //     /^(0|86|17951)?(13[0-9]|15[012356789]|166|17[3678]|18[0-9]|14[57])[0-9]{8}$/
+      //   )
+      // ) {
+      //   this.$notify({
+      //     title: "提示",
+      //     message: "手机号不正确",
+      //     type: "warning"
+      //   });
+      //   return false;
+      // }
 
       this.$confirm("确认已阅读相关注意事项并进入考试").then(() => {
-        this.$api.user(this.data).then(res => {
-          if (Number(res.err_no) === 0) {
-            this.$router.replace(`/test?code=${this.$route.query.code}`);
-          } else {
-            this.$notify({
-              title: "提示",
-              message: res.err_message,
-              type: "error"
-            });
-          }
-        });
+        this.$api
+          .verifyCode({
+            phone: this.data.phone,
+            verify_code: this.data.code
+          })
+          .then(res => {
+            if (res.check) {
+              this.$api
+                .exam({
+                  phone: this.data.phone,
+                  verify_code: this.data.verify_code
+                })
+                .then(res1 => {
+                  console.log("11", res1);
+                });
+            }
+          });
+        // verifyCode
+
+        // this.$api.user(this.data).then(res => {
+        //   if (Number(res.err_no) === 0) {
+        //     this.$router.replace(`/test?code=${this.$route.query.code}`);
+        //   } else {
+        //     this.$notify({
+        //       title: "提示",
+        //       message: res.err_message,
+        //       type: "error"
+        //     });
+        //   }
+        // });
       });
     }
   },
@@ -279,7 +343,7 @@ li
         flex 9
         ul
           margin-left 60px
-          margin-right 70px
+          margin-right 60px
           li
             height 70px
             line-height 70px

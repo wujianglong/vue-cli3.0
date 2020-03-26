@@ -1,12 +1,12 @@
 // 所有接口
 import ask from "./config";
 
-let baseApiUrl;
-if (process.env.NODE_ENV === "development") {
-  baseApiUrl = "http://exam_dev.z7z8.cc/api";
-} else {
-  baseApiUrl = "http://exam_dev.z7z8.cc/api";
-}
+let baseApiUrl = process.env.VUE_APP_API_ROOT;
+// if (process.env.NODE_ENV === "development") {
+//   baseApiUrl = "http://exam_dev.z7z8.cc/api";
+// } else {
+//   baseApiUrl = "http://exam_dev.z7z8.cc/api";
+// }
 
 export default {
   // 获取试题信息
@@ -24,5 +24,13 @@ export default {
   // code有效性验证
   validate(params) {
     return ask.askGet(baseApiUrl + "/code_status/", params);
+  },
+  // 发送短信验证码
+  sendCode(params) {
+    return ask.askPost(baseApiUrl + "/api/verify-code/", params);
+  },
+  // 验证短信验证码
+  verifyCode(params) {
+    return ask.askPost(baseApiUrl + "/api/verify-code-check/", params);
   }
 };
