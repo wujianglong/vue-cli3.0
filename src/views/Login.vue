@@ -158,7 +158,7 @@ export default {
           });
 
           this.codeFlag = true;
-          let c = 6;
+          let c = 60;
           this.codeText = c + "s";
           let s = setInterval(() => {
             c--;
