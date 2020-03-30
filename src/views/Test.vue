@@ -264,7 +264,7 @@ export default {
       return false;
     }
 
-    // this.testing();
+    this.testing();
     let e = this.examList;
     this.maxtime = parseInt(
       (+new Date(e.enter_time) + 45 * 60000 - +new Date()) / 1000
@@ -277,7 +277,7 @@ export default {
 
     this.single = this.singleElection.map(o => {
       return {
-        id: o.id,
+        id: Number(o.id),
         select: []
       };
     });
@@ -288,7 +288,7 @@ export default {
 
     this.multiple = this.multipleElection.map(o => {
       return {
-        id: o.id,
+        id: Number(o.id),
         select: []
       };
     });
@@ -485,7 +485,7 @@ export default {
 
       console.log("s", s);
 
-      console.log("m", m);
+      // console.log("m", m);
 
       console.log("su", su);
 

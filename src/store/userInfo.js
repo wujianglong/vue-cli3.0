@@ -15,13 +15,16 @@ export default {
   getters: {},
   actions: {
     getExam({ commit }, obj) {
-      api
-        .getExam({
-          params: obj
-        })
-        .then(res => {
-          commit("examList", res);
-        });
+      return new Promise(resolve => {
+        api
+          .getExam({
+            params: obj
+          })
+          .then(res => {
+            commit("examList", res);
+            resolve(res);
+          });
+      });
     },
     userInfo({ commit }, obj) {
       return new Promise(resolve => {

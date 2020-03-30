@@ -241,18 +241,18 @@ export default {
                   phone: this.data.phone,
                   verify_code: this.data.code
                 })
-                .then(res => {
-                  console.log("22", res);
+                .then(res1 => {
+                  console.log("22", res1);
                   // errno
-                  // if (res.data.errno === -1) {
-                  //   this.$notify({
-                  //     type: "error",
-                  //     message: res.errmsg
-                  //   });
-                  // } else {
-                  //   localStorage.setItem("timeEnd", "false");
-                  //   this.$router.push("/test");
-                  // }
+                  if (res1.errno === -1) {
+                    this.$notify({
+                      type: "error",
+                      message: res1.errmsg
+                    });
+                  } else {
+                    localStorage.setItem("timeEnd", "false");
+                    this.$router.push("/test");
+                  }
                 });
 
               // this.$api
