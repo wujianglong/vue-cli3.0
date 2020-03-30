@@ -1,15 +1,28 @@
 import api from "../api/api";
 export default {
   state: {
-    userInfo: {}
+    userInfo: {},
+    examList: {}
   },
   mutations: {
     userInfo(state, res) {
       state.userInfo = res;
+    },
+    examList(state, res) {
+      state.examList = res;
     }
   },
   getters: {},
   actions: {
+    getExam({ commit }, obj) {
+      api
+        .getExam({
+          params: obj
+        })
+        .then(res => {
+          commit("examList", res);
+        });
+    },
     userInfo({ commit }, obj) {
       return new Promise(resolve => {
         api.login(obj).then(res => {

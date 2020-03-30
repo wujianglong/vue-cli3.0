@@ -32,5 +32,12 @@ export default {
   // 验证短信验证码
   verifyCode(params) {
     return ask.askPost(baseApiUrl + "/api/verify-code-check/", params);
+  },
+  // 获取在线测试试题
+  getExam(params) {
+    return ask.askGet(baseApiUrl + "/api/exam/", params);
+  },
+  submitPage(params) {
+    return ask.askPost(baseApiUrl + "/api/exam/", params);
   }
 };

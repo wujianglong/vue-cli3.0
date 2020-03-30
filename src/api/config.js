@@ -25,38 +25,9 @@ axios.interceptors.request.use(
   }
 );
 
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    switch (error.response.status) {
-      case 401:
-        // token失效状态码
-        localStorage.clear();
-        // router.replace({
-        //   path: "/"
-        // });
-        Notification({
-          title: "警告",
-          message: "登录信息失效，请重新登录。",
-          type: "warning"
-        });
-        break;
-      case 404:
-        // 服务器未知错误
-        Notification({
-          title: "警告",
-          message: "服务器未知错误。",
-          type: "error"
-        });
-        break;
-      default:
-        return Promise.reject(error);
-    }
-    return error;
-  }
-);
+axios.interceptors.response.use(response => {
+  return response;
+});
 
 // Post
 export default {

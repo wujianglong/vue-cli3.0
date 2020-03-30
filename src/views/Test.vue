@@ -6,7 +6,7 @@
         <video id="video"></video>
       </div>
       <!-- 倒计时 -->
-      <div class="count red mt5 ml5" v-if="!end">
+      <div class="count red mt5 ml5" v-if="!timeEnd">
         {{ "倒计时 " + time }}
       </div>
       <div class="contain">
@@ -28,41 +28,84 @@
               <span class="red">答题倒计时 00:49:29</span>
             </div> -->
           </div>
-          <div v-if="!end">
-            <h1>选择题（{{ this.select.length }}道）</h1>
+          <div v-if="!timeEnd">
+            <h1>单选题（{{ singleElection.length }}道）</h1>
             <div class="fieldset">
-              <div class="div_question" v-for="(o, i) in select" :key="i">
+              <div
+                class="div_question"
+                v-for="(o, i) in singleElection"
+                :key="i"
+              >
                 <div class="div_topic">
                   <span>{{ i + 1 }}.</span>
-                  <span class="ml15">{{ o.subject }}</span>
-                  <span class="req" v-show="!select[i].select">*</span>
+                  <span class="ml15">{{ o.title }}</span>
+                  <span class="req" v-show="single[i].select.length === 0"
+                    >*</span
+                  >
                 </div>
                 <div class="div_content color-gray3 mt5">
-                  <div v-for="(o1, i1) in o.question_options" :key="i1">
+                  <div v-for="(o1, i1) in Object.entries(o.option)" :key="i1">
                     <el-radio
                       class="wid-100"
-                      v-model="select[i].select"
-                      :label="o1.id"
-                      >{{ o1.content }}</el-radio
+                      v-model="single[i].select"
+                      :label="o1[0]"
+                      >{{ o1[1] }}</el-radio
                     >
+                    <!-- v-model="select[i].select" -->
+                    <!-- <el-radio class="wid-100" :label="21"></el-radio> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <h1>多选题（{{ this.multipleElection.length }}道）</h1>
+            <div class="fieldset">
+              <div
+                class="div_question"
+                v-for="(o, i) in multipleElection"
+                :key="i"
+              >
+                <div class="div_topic">
+                  <span>{{ i + 1 }}.</span>
+                  <span class="ml15">{{ o.title }}</span>
+                  <span class="req" v-show="multiple[i].select.length === 0"
+                    >*</span
+                  >
+                </div>
+                <div class="color-gray3 mt5">
+                  <div>
+                    <!-- v-model="select[i].select" -->
+                    <!-- <el-radio class="wid-100" :label="21"></el-radio> -->
+                    <el-checkbox-group
+                      class="ml20"
+                      v-model="multiple[i].select"
+                    >
+                      <el-checkbox
+                        v-for="(o1, i1) in Object.entries(o.option)"
+                        :key="i1"
+                        :label="o1[0]"
+                      >
+                        {{ o1[1] }}
+                      </el-checkbox>
+                    </el-checkbox-group>
                   </div>
                 </div>
               </div>
             </div>
 
             <div class="fieldset">
-              <h1>简答题（{{ this.shortAnswer.length }}道）</h1>
-              <div class="div_question" v-for="(o, i) in shortAnswer" :key="i">
+              <h1>简答题（{{ this.subject.length }}道）</h1>
+              <div class="div_question" v-for="(o, i) in subject" :key="i">
                 <div class="div_topic">
                   <span>{{ i + 1 }}.</span>
-                  <span class="ml15">{{ o.subject }}</span>
-                  <span class="req" v-show="!shortAnswer[i].txt">*</span>
+                  <span class="ml15">{{ o.title }}</span>
+                  <span class="req" v-show="!subjectList[i].answers">*</span>
                 </div>
                 <div class="div_content color-gray3 mt15 cb">
                   <div class="area">
                     <el-input
+                      v-model="subjectList[i].answers"
                       type="textarea"
-                      v-model="shortAnswer[i].txt"
                       resize="none"
                       :rows="6"
                     ></el-input>
@@ -72,13 +115,28 @@
             </div>
 
             <div class="tac wid-100">
-              <el-button class="wid-20" type="primary" @click="submit">{{
-                end ? "关闭" : "提交"
-              }}</el-button>
+              <el-button
+                v-if="!timeEnd"
+                class="wid-20"
+                type="primary"
+                @click="submit"
+                >提交</el-button
+              >
+
+              <!-- slideHeight -->
             </div>
           </div>
           <div v-else>
-            <h1>尊敬的考生您好，本次考试已经结束,请耐心等待后续通知。。</h1>
+            <h1>尊敬的考生您好，您本次考试已经结束,请耐心等待后续通知。。</h1>
+            <div class="tac" style="margin-top:20px">
+              <el-button
+                v-if="timeEnd"
+                class="wid-20"
+                type="primary"
+                @click="cancle"
+                >关闭</el-button
+              >
+            </div>
           </div>
         </div>
       </div>
@@ -86,9 +144,10 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 import NProgress from "nprogress";
 export default {
-  name: "layout",
+  name: "test",
   data() {
     return {
       radioList: {
@@ -101,80 +160,208 @@ export default {
       time: "",
       timer: "",
       maxtime: "",
-      select: [],
-      shortAnswer: [],
+      // select: [],
+      // shortAnswer: [],
+      cs: [],
       end: false,
-      timeEnd: false
+      timeEnd: false,
+      singleElection: [], // 单选
+      multipleElection: [], // 多选
+      subject: [], //主观题
+      single: [],
+      multiple: [],
+      subjectList: [],
+      answer: ""
     };
   },
+  computed: {
+    ...mapState({
+      examList: state => state.userInfo.examList
+    })
+  },
   watch: {
-    radioList: {
-      handler(val) {
-        let l = Object.values(val);
-        let c = l.filter(o => {
-          return o;
-        });
-        let c1 = c.length / l.length;
-        this.slideHeight = c1 * 100 + "%";
-        NProgress.set(c1);
+    single: {
+      handler() {
+        let num =
+          this.single.length + this.multiple.length + this.subjectList.length;
+
+        let n1 = this.single.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n2 = this.multiple.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n3 = this.subjectList.filter(o => {
+          return o.answers;
+        }).length;
+
+        let b = (n1 + n2 + n3) / num;
+
+        this.slideHeight = b * 100 + "%";
+        console.log(b);
+        NProgress.set(b);
+      },
+      deep: true
+    },
+    multiple: {
+      handler() {
+        let num =
+          this.single.length + this.multiple.length + this.subjectList.length;
+
+        let n1 = this.single.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n2 = this.multiple.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n3 = this.subjectList.filter(o => {
+          return o.answers;
+        }).length;
+
+        let b = (n1 + n2 + n3) / num;
+
+        this.slideHeight = b * 100 + "%";
+        console.log(b);
+        NProgress.set(b);
+      },
+      deep: true
+    },
+    subjectList: {
+      handler() {
+        let num =
+          this.single.length + this.multiple.length + this.subjectList.length;
+
+        let n1 = this.single.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n2 = this.multiple.filter(o => {
+          return o.select.length !== 0;
+        }).length;
+
+        let n3 = this.subjectList.filter(o => {
+          return o.answers;
+        }).length;
+
+        let b = (n1 + n2 + n3) / num;
+
+        this.slideHeight = b * 100 + "%";
+        console.log(b);
+        NProgress.set(b);
       },
       deep: true
     }
   },
   mounted() {
-    // this.testing();
+    console.log(this.examList);
 
-    if (!this.$route.query.code) {
-      this.end = true;
+    if (localStorage.getItem("timeEnd") === "true") {
+      this.timeEnd = true;
       return false;
     }
-    this.$api
-      .validate({
-        params: {
-          code: this.$route.query.code
-        }
-      })
-      .then(d => {
-        if (
-          d.status === "答题完成" ||
-          d.status === "不存在" ||
-          d.status === "答题超时"
-        ) {
-          this.end = true;
-        } else {
-          this.$api
-            .getPaper({
-              params: {
-                code: this.$route.query.code
-              }
-            })
-            .then(res => {
-              // 时间逆序
-              this.maxtime = parseInt(
-                (+new Date(res.start_time_s) + 60 * 1000 - +new Date()) / 1000
-              );
 
-              let q = res.questions;
-              this.shortAnswer = q.filter(o => {
-                return o.question_type === "简答题";
-              });
+    // this.testing();
+    let e = this.examList;
+    this.maxtime = parseInt(
+      (+new Date(e.enter_time) + 45 * 60000 - +new Date()) / 1000
+    );
 
-              this.select = q.filter(o => {
-                return o.question_type === "选择题";
-              });
+    let q = e.question_copy_list;
+    this.singleElection = q.filter(o => {
+      return Number(o.type) === 1;
+    });
 
-              this.timer = setInterval(() => {
-                this.countDown();
-              }, 1000);
-            })
-            .catch(() => {
-              this.$notify({
-                title: "提示",
-                message: "获取试题失败，请联系管理重新获取新的地址"
-              });
-            });
-        }
-      });
+    this.single = this.singleElection.map(o => {
+      return {
+        id: o.id,
+        select: []
+      };
+    });
+
+    this.multipleElection = q.filter(o => {
+      return Number(o.type) === 2;
+    });
+
+    this.multiple = this.multipleElection.map(o => {
+      return {
+        id: o.id,
+        select: []
+      };
+    });
+
+    this.subject = q.filter(o => {
+      return Number(o.type) === 3 && o;
+    });
+
+    this.subjectList = this.subject.map(o => {
+      return {
+        id: o.id,
+        answers: ""
+      };
+    });
+
+    this.timer = setInterval(() => {
+      this.countDown();
+    }, 1000);
+
+    // this.timer = setInterval(() => {
+    //   this.countDown();
+    // }, 1000);
+
+    // if (!this.$route.query.code) {
+    //   this.end = true;
+    //   return false;
+    // }
+    // this.$api
+    //   .validate({
+    //     params: {
+    //       code: this.$route.query.code
+    //     }
+    //   })
+    //   .then(d => {
+    //     if (
+    //       d.status === "答题完成" ||
+    //       d.status === "不存在" ||
+    //       d.status === "答题超时"
+    //     ) {
+    //       this.end = true;
+    //     } else {
+    //       this.$api
+    //         .getPaper({
+    //           params: {
+    //             code: this.$route.query.code
+    //           }
+    //         })
+    //         .then(res => {
+    //           this.maxtime = parseInt(
+    //             (+new Date(res.start_time_s) + 60 * 1000 - +new Date()) / 1000
+    //           );
+
+    //           let q = res.questions;
+    //           this.shortAnswer = q.filter(o => {
+    //             return o.question_type === "简答题";
+    //           });
+
+    //           this.select = q.filter(o => {
+    //             return o.question_type === "选择题";
+    //           });
+
+    //           this.timer = setInterval(() => {
+    //             this.countDown();
+    //           }, 1000);
+    //         })
+    //         .catch(() => {
+    //           this.$notify({
+    //             title: "提示",
+    //             message: "获取试题失败，请联系管理重新获取新的地址"
+    //           });
+    //         });
+    //     }
+    //   });
   },
   created() {},
   methods: {
@@ -212,7 +399,8 @@ export default {
         .catch(() => {
           this.$notify({
             title: "提示",
-            message: "摄像设备已关闭，将影响考试成绩",
+            message:
+              "检测到摄像设备已关闭，为了不影响考试成绩有效性，打开摄像设备刷新浏览器后重试。",
             type: "warning"
           });
         });
@@ -253,108 +441,167 @@ export default {
           type: "warning"
         });
         clearInterval(this.timer);
-        this.timeEnd = true;
+        // this.timeEnd = true;
         this.submit();
       }
     },
+    cancle() {
+      localStorage.clear();
+      this.$router.replace("/");
+    },
     submit() {
-      // if (this.end) {
-      //   window.opener = null;
-      //   window.open("", "_self");
-      //   window.close();
+      // 考试时间已过
+      if (this.timeEnd) {
+        this.$notify({
+          type: "error",
+          message: "考试时间已经结束"
+        });
+        return false;
+      }
+
+      // 试卷暂未完成
+      if (this.slideHeight !== "100%") {
+        this.$notify({
+          type: "warning",
+          message: "试卷暂未完成"
+        });
+        return false;
+      }
+
+      let s = {};
+      let su = {};
+
+      this.single.forEach(o => {
+        s[o.id] = o.select;
+      });
+
+      this.multiple.forEach(o => {
+        s[o.id] = o.select.sort();
+      });
+
+      this.subjectList.forEach(o => {
+        su[o.id] = o.answers;
+      });
+
+      console.log("s", s);
+
+      console.log("m", m);
+
+      console.log("su", su);
+
+      // 组装数据
+      let params = {
+        paper_id: this.examList.id,
+        answer: s,
+        subjective_answer: su
+      };
+
+      console.log(params);
+
+      this.$confirm("确认提交试卷?").then(() => {
+        this.$api.submitPage(params).then(() => {
+          this.$notify({
+            title: "提示",
+            message: "试卷提交成功，请耐心等待后续联系",
+            type: "success"
+          });
+          this.timeEnd = true;
+          localStorage.setItem("timeEnd", true);
+        });
+      });
+
+      // let t = [];
+      // for (let i in this.select) {
+      //   if (!this.select[i].select && !this.timeEnd) {
+      //     this.$notify({
+      //       title: "提示",
+      //       message: "单选题还未完成",
+      //       type: "warning"
+      //     });
+      //     return false;
+      //   }
+      //   t.push({
+      //     selected_option_id: this.select[i].select,
+      //     question_id: this.select[i].id
+      //   });
       // }
-      let t = [];
-      for (let i in this.select) {
-        if (!this.select[i].select && !this.timeEnd) {
-          this.$notify({
-            title: "提示",
-            message: "单选题还未完成",
-            type: "warning"
-          });
-          return false;
-        }
-        t.push({
-          selected_option_id: this.select[i].select,
-          question_id: this.select[i].id
-        });
-      }
 
-      for (let i1 in this.shortAnswer) {
-        if (!this.shortAnswer[i1].txt && !this.timeEnd) {
-          this.$notify({
-            title: "提示",
-            message: "简答题还未完成",
-            type: "warning"
-          });
-          return false;
-        }
-        t.push({
-          answer: this.shortAnswer[i1].txt,
-          question_id: this.shortAnswer[i1].id
-        });
-      }
+      // for (let i1 in this.shortAnswer) {
+      //   if (!this.shortAnswer[i1].txt && !this.timeEnd) {
+      //     this.$notify({
+      //       title: "提示",
+      //       message: "简答题还未完成",
+      //       type: "warning"
+      //     });
+      //     return false;
+      //   }
+      //   t.push({
+      //     answer: this.shortAnswer[i1].txt,
+      //     question_id: this.shortAnswer[i1].id
+      //   });
+      // }
 
-      if (!this.timeEnd) {
-        this.$confirm("提交后将不再允许修改，确认提交?").then(() => {
-          this.$api
-            .submit({
-              code: this.$route.query.code,
-              answers: t
-            })
-            .then(res => {
-              if (Number(res.err_no) === 0) {
-                this.$notify({
-                  title: "提示",
-                  message: "试卷提交成功，请耐心等待后续联系",
-                  type: "success"
-                });
-                this.end = true;
-              } else {
-                this.$notify({
-                  title: "提示",
-                  message: res.err_message,
-                  type: "error"
-                });
-              }
-            })
-            .catch(() => {
-              this.$notify({
-                title: "提示",
-                message: "试卷提交失败",
-                type: "error"
-              });
-            });
-        });
-      } else {
-        this.$api
-          .submit({
-            code: this.$route.query.code,
-            answers: t
-          })
-          .then(res => {
-            if (Number(res.err_no) === 0) {
-              this.$notify({
-                title: "提示",
-                message: "试卷提交成功，请耐心等待后续联系",
-                type: "success"
-              });
-              this.end = true;
-            } else {
-              this.$notify({
-                title: "提示",
-                message: res.err_message,
-                type: "error"
-              });
-            }
-          })
-          .catch(() => {
-            this.$notify({
-              title: "提示",
-              message: "试卷提交失败",
-              type: "error"
-            });
-          });
-      }
+      // if (!this.timeEnd) {
+      //   this.$confirm("提交后将不再允许修改，确认提交?").then(() => {
+      //     this.$api
+      //       .submit({
+      //         code: this.$route.query.code,
+      //         answers: t
+      //       })
+      //       .then(res => {
+      //         if (Number(res.err_no) === 0) {
+      //           this.$notify({
+      //             title: "提示",
+      //             message: "试卷提交成功，请耐心等待后续联系",
+      //             type: "success"
+      //           });
+      //           this.end = true;
+      //         } else {
+      //           this.$notify({
+      //             title: "提示",
+      //             message: res.err_message,
+      //             type: "error"
+      //           });
+      //         }
+      //       })
+      //       .catch(() => {
+      //         this.$notify({
+      //           title: "提示",
+      //           message: "试卷提交失败",
+      //           type: "error"
+      //         });
+      //       });
+      //   });
+      // } else {
+      //   this.$api
+      //     .submit({
+      //       code: this.$route.query.code,
+      //       answers: "2"
+      //     })
+      //     .then(res => {
+      //       if (Number(res.err_no) === 0) {
+      //         this.$notify({
+      //           title: "提示",
+      //           message: "试卷提交成功，请耐心等待后续联系",
+      //           type: "success"
+      //         });
+      //         this.end = true;
+      //       } else {
+      //         this.$notify({
+      //           title: "提示",
+      //           message: res.err_message,
+      //           type: "error"
+      //         });
+      //       }
+      //     })
+      //     .catch(() => {
+      //       this.$notify({
+      //         title: "提示",
+      //         message: "试卷提交失败",
+      //         type: "error"
+      //       });
+      //     });
+      // }
     }
   }
 };
@@ -461,4 +708,10 @@ h1
       border-bottom 1px dashed #666
       height 30px
       line-height 30px
+</style>
+
+<style lang="stylus">
+.el-checkbox
+  display block
+  line-height 30px
 </style>

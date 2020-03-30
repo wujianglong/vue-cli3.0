@@ -124,9 +124,9 @@ export default {
       codeFlag: false,
       codeText: "发送验证码",
       data: {
-        username: "伍江龙",
+        username: "",
         identity: "360122199310104814",
-        phone: "15170037957",
+        phone: "",
         graduate_time: "2016-6-1",
         graduate_university: "江西农业大学",
         code: this.$route.query.code
@@ -236,14 +236,35 @@ export default {
           })
           .then(res => {
             if (res.check) {
-              this.$api
-                .exam({
+              this.$store
+                .dispatch("getExam", {
                   phone: this.data.phone,
-                  verify_code: this.data.verify_code
+                  verify_code: this.data.code
                 })
-                .then(res1 => {
-                  console.log("11", res1);
+                .then(res => {
+                  console.log("22", res);
+                  // errno
+                  // if (res.data.errno === -1) {
+                  //   this.$notify({
+                  //     type: "error",
+                  //     message: res.errmsg
+                  //   });
+                  // } else {
+                  //   localStorage.setItem("timeEnd", "false");
+                  //   this.$router.push("/test");
+                  // }
                 });
+
+              // this.$api
+              //   .getExam({
+              //     params: {
+              //       phone: this.data.phone,
+              //       verify_code: this.data.code
+              //     }
+              //   })
+              //   .then(res1 => {
+              //     console.log("11", res1);
+              //   });
             }
           });
         // verifyCode
