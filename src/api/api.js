@@ -39,5 +39,12 @@ export default {
   },
   submitPage(params) {
     return ask.askPost(baseApiUrl + "/api/exam/", params);
+  },
+  // 获取考试详情
+  getPageDetail(params) {
+    return ask.askGet(
+      baseApiUrl + "api/resumes/" + params.id + "/paper_answer/",
+      params
+    );
   }
 };

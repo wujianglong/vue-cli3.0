@@ -24,6 +24,14 @@ export default new Router({
         requireAuth: true
       },
       component: () => import("@/views/About.vue")
+    },
+    {
+      path: "/result",
+      name: "result",
+      meta: {
+        requireAuth: true
+      },
+      component: () => import("@/views/Result.vue")
     }
   ]
 });

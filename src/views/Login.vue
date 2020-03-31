@@ -1,7 +1,7 @@
 <template>
   <div class="login layout-flex">
     <div class="login-content">
-      <div class="header tac mb50 wid-100 mt40">中至数据集团招聘</div>
+      <div class="header tac mb50 wid-100 mt40">中至集团招聘</div>
       <div class="main layout-flex">
         <div class="main_l">
           <!-- 注意事项 -->
@@ -34,7 +34,7 @@
               <p>中至招聘</p>
             </div>
             <div class="erCode_r layout-flex tal">
-              <p>中至数据集团股份有限公司</p>
+              <p>中至集团股份有限公司</p>
               <p>公司网站： http://www.zonst.com</p>
               <p>公司地址：南昌市新建区望城镇玉壶山大道414号中至信息大厦</p>
             </div>

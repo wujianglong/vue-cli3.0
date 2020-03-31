@@ -13,10 +13,10 @@ axios.interceptors.request.use(
       return request;
     }
     // header存入token信息
-    if (localStorage.getItem("token")) {
-      request.headers.common["jwt-token"] = `${localStorage.getItem("token")}`;
-      return request;
-    }
+    // if (localStorage.getItem("token")) {
+    //   request.headers.common["jwt-token"] = `${localStorage.getItem("token")}`;
+    //   return request;
+    // }
 
     return request;
   },

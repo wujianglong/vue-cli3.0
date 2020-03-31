@@ -472,7 +472,7 @@ export default {
       let su = {};
 
       this.single.forEach(o => {
-        s[o.id] = o.select;
+        s[o.id] = o.select.split(",");
       });
 
       this.multiple.forEach(o => {
