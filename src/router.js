@@ -4,18 +4,19 @@ import Router from "vue-router";
 Vue.use(Router);
 
 export default new Router({
-  mode: "hash",
+  mode: "history",
   base: "/",
-  routes: [
-    {
+  routes: [{
       path: "/test",
       name: "Test",
-      component: () => import("@/views/Test.vue")
+      component: () =>
+        import ("@/views/Test.vue")
     },
     {
       path: "/",
       name: "login",
-      component: () => import("@/views/Login.vue")
+      component: () =>
+        import ("@/views/Login.vue")
     },
     {
       path: "/about",
@@ -23,15 +24,14 @@ export default new Router({
       meta: {
         requireAuth: true
       },
-      component: () => import("@/views/About.vue")
+      component: () =>
+        import ("@/views/About.vue")
     },
     {
       path: "/result",
       name: "result",
-      meta: {
-        requireAuth: true
-      },
-      component: () => import("@/views/Result.vue")
+      component: () =>
+        import ("@/views/Result.vue")
     }
   ]
 });
