@@ -29,7 +29,7 @@
             </div> -->
           </div>
           <div v-if="!timeEnd">
-            <h1>单选题（{{ singleElection.length }}道）</h1>
+            <h1>单选题1（{{ singleElection.length }}道）</h1>
             <div class="fieldset">
               <div
                 class="div_question"
